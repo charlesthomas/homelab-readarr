@@ -39,7 +39,7 @@ spec:
         imagePullPolicy: IfNotPresent
         ports:
         - name: readarr
-          containerPort: 8989
+          containerPort: 8787
         env:
         - name: PUID
           value: "1000"
