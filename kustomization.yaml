@@ -49,7 +49,7 @@ patches:
         gethomepage.dev/description: Book Finder
         gethomepage.dev/group: Media
         gethomepage.dev/icon: readarr
-        gethomepage.dev/name: readarr
+        gethomepage.dev/name: Readarr
         gethomepage.dev/pod-selector: ""
   target:
     kind: Ingress
