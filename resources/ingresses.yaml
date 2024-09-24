@@ -1,0 +1,25 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: readarr
+  namespace: readarr
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: readarr.crt.house
+    nginx.org/websocket-services: readarr
+spec:
+  ingressClassName: nginx-internal
+  rules:
+    - host: "readarr.crt.house"
+      http:
+        paths:
+          - path: "/"
+            pathType: Prefix
+            backend:
+              service:
+                name: readarr
+                port:
+                  number: 8787
+  tls:
+    - hosts:
+      - readarr.crt.house

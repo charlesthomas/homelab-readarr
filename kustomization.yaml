@@ -1,0 +1,55 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: readarr
+
+commonAnnotations:
+  repo: https://github.com/charlesthomas/homelab-readarr
+
+resources:
+- resources/backups.yaml
+- resources/deployments.yaml
+- resources/external-secrets.yaml
+- resources/ingresses.yaml
+- resources/namespaces.yaml
+- resources/pvcs.yaml
+- resources/service-accounts.yaml
+- resources/services.yaml
+- resources/statefulsets.yaml
+patches:
+- patch: |-
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: all
+      namespace: readarr
+      annotations:
+        reloader.stakater.com/auto: "true"
+  target:
+    kind: Deployment
+- patch: |-
+    apiVersion: apps/v1
+    kind: StatefulSet
+    metadata:
+      name: all
+      namespace: readarr
+      annotations:
+        reloader.stakater.com/auto: "true"
+  target:
+    kind: StatefulSet
+- patch: |-
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    metadata:
+      name: readarr
+      namespace: readarr
+      annotations:
+        gethomepage.dev/href: https://readarr.crt.house
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/description: Book Finder
+        gethomepage.dev/group: Media
+        gethomepage.dev/icon: readarr
+        gethomepage.dev/name: readarr
+        gethomepage.dev/pod-selector: ""
+  target:
+    kind: Ingress

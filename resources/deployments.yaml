@@ -1,0 +1,95 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: readarr
+  namespace: readarr
+  labels:
+    app: readarr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: readarr
+  template:
+    metadata:
+      labels:
+        app: readarr
+    spec:
+      dnsConfig:
+        nameservers:
+        - 10.43.0.10
+      dnsPolicy: None
+      initContainers:
+      - name: cp-config
+        image: alpine:latest
+        volumeMounts:
+          - name: readarr-config
+            mountPath: /tmp/readarr-config
+          - name: readarr
+            mountPath: /config
+        command:
+          - cp
+          - -v
+          - /tmp/readarr-config/config.xml
+          - /config/config.xml
+      containers:
+      - name: readarr
+        image: ghcr.io/linuxserver/readarr:4.0.9.2244-ls255
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: readarr
+          containerPort: 8989
+        env:
+        - name: PUID
+          value: "1000"
+        - name: PGID
+          value: "1000"
+        - name: TZ
+          value: "America/Detroit"
+        - name: UMASK
+          value: "022"
+        volumeMounts:
+        - name: readarr
+          mountPath: /config
+        - name: complete
+          mountPath: /mnt/complete
+        - name: critical-books
+          mountPath: /mnt/critical-books
+        - name: books
+          mountPath: /mnt/books
+        resources:
+          limits:
+            memory: 700Mi
+          requests:
+            memory: 350Mi
+        readinessProbe:
+          tcpSocket:
+            port: readarr
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        livenessProbe:
+          tcpSocket:
+            port: readarr
+          initialDelaySeconds: 15
+          periodSeconds: 20
+      volumes:
+      - name: readarr
+        persistentVolumeClaim:
+          claimName: readarr
+      - name: readarr-config
+        secret:
+          secretName: readarr-config
+      - name: complete
+        nfs:
+          path: /volume1/media/complete
+          server: 192.168.1.21
+      - name: critical-books
+        nfs:
+          path: /volume1/critical/media/books
+          server: 192.168.1.21
+      - name: books
+        nfs:
+          path: /volume1/media/books
+          server: 192.168.1.21
+

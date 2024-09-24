@@ -1,0 +1,16 @@
+---
+apiVersion: longhorn.io/v1beta2
+kind: RecurringJob
+metadata:
+  name: readarr
+  namespace: longhorn
+spec:
+  concurrency: 1
+  cron: 0 2 * * *
+  groups:
+  - readarr
+  labels:
+    app: readarr
+  name: readarr
+  retain: 7
+  task: backup
