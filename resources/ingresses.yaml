@@ -6,7 +6,6 @@ metadata:
   namespace: readarr
   annotations:
     external-dns.alpha.kubernetes.io/hostname: readarr.crt.house
-    nginx.org/websocket-services: readarr
 spec:
   ingressClassName: nginx-internal
   rules:
