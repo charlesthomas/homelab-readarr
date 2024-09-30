@@ -1,0 +1,38 @@
+#!/bin/bash
+
+REPO=homelab-readarr
+
+func setup_destination {
+    [ ! -d ../$1 ] && git clone https://github.com/charlesthomas/$1 ../$1
+    branch=$(git -C ../$1 branch --show-current)
+    [[ $(git -C ../$1 status --porcelain | wc -l) -ne 0 ]] && git -C ../$1 stash
+    [[ "${branch}" != "main" ]] && git -C ../$1 checkout main
+    git -C ../$1 pull
+    echo -n $branch
+}
+
+func push {
+    git -C ../$1 add $2
+    git -C ../$1 commit -m "chore(${REPO}): updating ${2}"
+    git -C ../$1 push
+}
+
+func reset_destination {
+    [[ "${2}" == "main" ]] && git -C ../$1 checkout $2
+    git -C ../$1 stash pop
+}
+
+branch=$(setup_destination homelab-stack)
+mkdir -p ../homelab-stack/apps
+cp argocd/readarr.yaml ../homelab-stack/apps/
+push homelab-stack argocd/readarr.yaml
+reset_destination homelab-stack $branch
+
+branch=$(setup_destination homelab-grafana)
+mkdir -p ../homelab-grafana/dashboards
+cp grafana/*.json ../homelab-grafana/dashboards/
+pushd ../homelab-grafana
+./generate-dashboards.sh
+popd
+push homelab-grafana grafana/*.json
+reset_destination homelab-grafana $branch
