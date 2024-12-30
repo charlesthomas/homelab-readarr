@@ -36,7 +36,7 @@ spec:
           - /config/config.xml
       containers:
       - name: readarr
-        image: ghcr.io/linuxserver/readarr:develop-0.4.6.2711-ls134
+        image: ghcr.io/linuxserver/readarr:develop-0.4.6.2711-ls135
         imagePullPolicy: IfNotPresent
         ports:
         - name: readarr
