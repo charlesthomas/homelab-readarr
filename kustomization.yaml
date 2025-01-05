@@ -16,6 +16,14 @@ resources:
 - resources/service-accounts.yaml
 - resources/services.yaml
 - resources/statefulsets.yaml
+
+images:
+  - name: postgres
+    newTag: "14.15"
+  - name: readarr
+    newName: ghcr.io/linuxserver/readarr
+    newTag: develop-0.4.7.2718-ls136
+
 patches:
 - patch: |-
     apiVersion: apps/v1
