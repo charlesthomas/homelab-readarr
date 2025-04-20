@@ -22,7 +22,7 @@ images:
     newTag: "14.15"
   - name: readarr
     newName: ghcr.io/linuxserver/readarr
-    newTag: develop-0.4.14.2782-ls150
+    newTag: develop-0.4.15.2787-ls151
 
 patches:
 - patch: |-
