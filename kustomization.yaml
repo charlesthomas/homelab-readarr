@@ -55,7 +55,7 @@ patches:
         gethomepage.dev/href: https://readarr.crt.house
         gethomepage.dev/enabled: "true"
         gethomepage.dev/description: Book Finder
-        gethomepage.dev/group: Media
+        gethomepage.dev/group: "Media Management"
         gethomepage.dev/icon: readarr
         gethomepage.dev/name: Readarr
         gethomepage.dev/pod-selector: ""
